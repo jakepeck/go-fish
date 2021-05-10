@@ -1,5 +1,6 @@
 body {
   margin: 0 auto;
+  text-align: center;
 }
 
 li {
@@ -15,4 +16,59 @@ ul {
 
 a {
   padding: 10px;
+}
+
+div {
+  border: 5px solid black;
+}
+
+#hero {
+  height: 75vh;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+#gameContainer {
+  display: grid;
+  width: 67vw;
+  height: 67vh;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 2px solid red;
+  align-content: center;
+}
+
+#player {
+  display: grid;
+  grid-row: 3;
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-template-rows: 2;
+}
+
+#cpu1 {
+  display: grid;
+  grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-template-rows: 2;
+}
+
+.hand {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.books {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+#deck {
+  grid-area: 2 / 2 / 2 / 2;
+  height: 100px;
+  width: 80px;
+  align-self: center;
+  justify-self: center;
 }
