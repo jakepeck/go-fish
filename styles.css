@@ -1,0 +1,18 @@
+body {
+  margin: 0 auto;
+}
+
+li {
+  display: inline;
+  padding: 0px;
+}
+
+ul {
+  display: inline-flex;
+  margin: 0;
+  padding: 20px 0;
+}
+
+a {
+  padding: 10px;
+}
