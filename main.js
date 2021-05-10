@@ -116,11 +116,7 @@ class Player {
     if (randOpp === currentPlayer) {
       console.log(`randOpp was same as player`)
       console.log(randOpp)
-      if (currentPlayer === 1) {
-        return 0
-      } else {
-        return 1
-      }
+      return this.pickRandomOpponent(playerArr, currentPlayer)
     } else {
       console.log(
         `randOpp was opponent number: ${randOpp} and the currentPlayer was ${currentPlayer}`
@@ -216,6 +212,27 @@ const dealCards = () => {
     for (let i = 0; i < allPlayers.length; i++) {
       // 2 players so 7 cards dealt to each
       for (let j = 0; j < 7; j++) {
+        console.log(gameDeck.length)
+        let cardDrawn = drawTopCard(gameDeck)
+        console.log(
+          `player ${allPlayers[i].name} has drawn card: ${cardDrawn.rank} of ${cardDrawn.suit}`
+        )
+        allPlayers[i].addCardToHand(cardDrawn)
+        allPlayers[i].printHand()
+        console.log(`deck is now ${gameDeck.length} cards`)
+      }
+      // console.log(`Calling updateBooks for player ${i}`)
+      allPlayers[i].updateBooks()
+      // console.log(`Calling sortHandByValue on player ${i} hands`)
+      allPlayers[i].sortHandByValue()
+      allPlayers[i].printHand()
+    }
+    console.log('Dealing is complete')
+  } else {
+    console.log('Dealing has begun')
+    for (let i = 0; i < allPlayers.length; i++) {
+      // 3-4 players so 5 cards dealt to each
+      for (let j = 0; j < 5; j++) {
         console.log(gameDeck.length)
         let cardDrawn = drawTopCard(gameDeck)
         console.log(
@@ -419,6 +436,9 @@ const playGame = () => {
   // console.log(`calling play turn`)
   // playTurn(allPlayers, 0, gameRunning)
   for (let i = 0; i < 30; i++) {
+    if (getGameScore(allPlayers) === 13) {
+      break
+    }
     printRoundStats(allPlayers, i)
 
     letTheRobotsPlay(allPlayers)
@@ -439,9 +459,11 @@ let player1 = new Player('Jake')
 
 let numCPU = 1
 let cpu1 = new ComputerPlayer('CPU #1')
-console.log(player1, cpu1)
+let cpu2 = new ComputerPlayer('CPU #2')
+let cpu3 = new ComputerPlayer('CPU #3')
+console.log(player1, cpu1, cpu2, cpu3)
 
-let allPlayers = [player1, cpu1]
+let allPlayers = [player1, cpu1, cpu2, cpu3]
 
 newGameBtn.addEventListener('click', playGame)
 
