@@ -37,7 +37,14 @@ class Player {
   printHand() {
     console.log('players current hand is: ')
     for (let i = 0; i < this.hand.length; i++) {
-      console.log(this.hand[i].rank + ' of ' + this.hand[i].suit)
+      console.log(typeof this.hand[i].value)
+      console.log(
+        this.hand[i].rank +
+          ' of ' +
+          this.hand[i].suit +
+          ' value is ' +
+          this.hand[i].value
+      )
     }
   }
   updateBooks() {
@@ -56,6 +63,20 @@ class Player {
       console.log(`Books is now: ${this.books}`)
     })
     console.log(`Books at end of function udpateBooks is: ${this.books}`)
+  }
+  fishRandomly() {
+    let randomFish = this.hand[Math.floor(Math.random() * this.hand.length)]
+    console.log(randomFish.rank)
+    console.log(randomFish.suit)
+    console.log(randomFish.value)
+  }
+  isInHand(cardVal) {
+    for (let i = 0; i < this.hand.length; i++) {
+      if (this.hand[i].value === cardVal) {
+        return true
+      }
+    }
+    return false
   }
 }
 
@@ -138,10 +159,17 @@ const dealCards = () => {
       allPlayers[i].updateBooks()
     }
     console.log('Dealing is complete')
+
+    player.fishRandomly()
   }
 }
 
 let player = new Player()
+let player2 = new Player()
+player2.addCardToHand(new Card('Five', 'Spades', 3))
+player2.printHand()
+console.log(player2.isInHand(3))
+console.log(player2.isInHand(5))
 
 let numCPU = 1
 let cpu1 = new ComputerPlayer()
