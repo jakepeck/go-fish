@@ -71,6 +71,24 @@ class Player {
       `Books at end of function udpateBooks for ${this.name} is: ${this.books}`
     )
   }
+  removeCardsFromHand(cardVal, numCards) {
+    // function to remove 4 cards in case of book, or all cards of card value
+    // if fished  by an opponent
+    console.log(`calling removeCardsFromHand`)
+    this.sortHandByValue()
+    console.log(
+      `card value to remove: ${cardVal} number to remove: ${numCards}`
+    )
+    console.log(this.hand)
+    for (let i = 0; i < this.hand.length; i++) {
+      if (this.hand[i].value === cardVal) {
+        this.hand.splice(i, numCards)
+        console.log('Just spliced')
+        console.log(this.hand)
+      }
+    }
+  }
+
   pickRandomOpponent(playerArr) {
     let randOpp = parseInt(Math.floor[Math.random() * playerArr.length])
     if (randOpp === 0) {
@@ -189,53 +207,64 @@ const dealCards = () => {
   }
 }
 
-const playTurn = (player) => {
-  console.log(`Player ${player.name} looks at his hand: `)
-  player.printHand()
-  player.printBooks()
+const playTurn = (players, playerIdx, gameRunning) => {
+  if (gameRunning === true) {
+    let player = players[playerIdx]
+    console.log(`Player ${player.name} looks at his hand: `)
+    player.printHand()
+    player.printBooks()
 
-  let playerChoiceIdx = player.pickRandomOpponent
-  let playerToPickFrom = allPlayers[1]
-  console.log(
-    `Player ${player.name} chose to pick from player ${playerToPickFrom.name}`
-  )
-  let fishingTarget = player.fishRandomly()
-  console.log(
-    `Player ${player.name} says 'do you have any ${fishingTarget.rank}s`
-  )
-  console.log(`Player ${playerToPickFrom.name} looks in his hand: `)
-  playerToPickFrom.printHand()
-  playerToPickFrom.printBooks()
-  if (playerToPickFrom.isInHand(fishingTarget.value) === true) {
+    let playerChoiceIdx = player.pickRandomOpponent
+    let playerToPickFrom = allPlayers[1]
     console.log(
-      `${playerToPickFrom.name} says 'Yep! I have ${
-        playerToPickFrom.books[fishingTarget.value]
-      } of em`
+      `Player ${player.name} chose to pick from player ${playerToPickFrom.name}`
     )
-  } else {
-    console.log(`${playerToPickFrom} says 'nope! Go Fish!'`)
-    let fishMyWishCand = drawTopCard(gameDeck)
-    if (fishMyWishCand.value === fishingTarget.value) {
-      // LOOP TO START OF TURN
-      console.log(`Fished my wish!!!!`)
+    let fishingTarget = player.fishRandomly()
+    console.log(
+      `Player ${player.name} says 'do you have any ${fishingTarget.rank}s`
+    )
+    console.log(`Player ${playerToPickFrom.name} looks in his hand: `)
+    playerToPickFrom.printHand()
+    playerToPickFrom.printBooks()
+    if (playerToPickFrom.isInHand(fishingTarget.value) === true) {
+      console.log(
+        `${playerToPickFrom.name} says 'Yep! I have ${
+          playerToPickFrom.books[fishingTarget.value]
+        } of em`
+      )
     } else {
-      // NEXT PLAYERS TURN
-      console.log(`Dangit maybe next time`)
+      console.log(`${playerToPickFrom} says 'nope! Go Fish!'`)
+      let fishMyWishCand = drawTopCard(gameDeck)
+      player.addCardToHand(fishMyWishCand)
+      if (fishMyWishCand.value === fishingTarget.value) {
+        // LOOP TO START OF TURN
+        console.log(`Fished my wish!!!!`)
+        player.printHand()
+        player.sortHandByValue()
+        player.printHand()
+        player.updateBooks()
+        player.printBooks()
+      } else {
+        // NEXT PLAYERS TURN
+        console.log(`Dangit maybe next time`)
+        if (gameRunning === true) {
+          playTurn(players, playerIdx + 1, gameRunning)
+        }
+      }
     }
-
-    // player.printHand();
-    // player.sortHandByValue();
-    // player.printHand();
-    // player.updateBooks();
-    // player.printBooks();
+  } else {
+    console.log('GAme is over!!')
+    return
   }
 }
+
+let gameRunning = true
 
 const playGame = () => {
   console.log('STarting game!!')
   dealCards()
   console.log(`calling play turn`)
-  playTurn(allPlayers[0])
+  playTurn(allPlayers, 0, gameRunning)
 }
 
 let player1 = new Player('Jake')
