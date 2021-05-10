@@ -23,7 +23,7 @@ div {
 }
 
 #hero {
-  height: 75vh;
+  height: 90vh;
   display: grid;
   justify-content: center;
   align-content: center;
@@ -31,12 +31,13 @@ div {
 
 #gameContainer {
   display: grid;
-  width: 67vw;
-  height: 67vh;
+  width: 60vw;
+  height: 60vh;
   grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr;
   border: 2px solid red;
   align-content: center;
+  margin: 20px auto;
 }
 
 #player {
@@ -71,4 +72,11 @@ div {
   width: 80px;
   align-self: center;
   justify-self: center;
+}
+
+button {
+  padding: 1em;
+  border: transparent;
+  width: 80px;
+  height: 50px;
 }
