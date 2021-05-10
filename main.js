@@ -27,7 +27,8 @@ class Card {
 }
 
 class Player {
-  constructor() {
+  constructor(name) {
+    this.name = name
     this.hand = []
     this.books = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   }
@@ -35,9 +36,9 @@ class Player {
     this.hand.push(card)
   }
   printHand() {
-    console.log('players current hand is: ')
+    console.log(`player ${this.name} current hand is: `)
     for (let i = 0; i < this.hand.length; i++) {
-      console.log(typeof this.hand[i].value)
+      // console.log(typeof this.hand[i].value)
       console.log(
         this.hand[i].rank +
           ' of ' +
@@ -47,13 +48,17 @@ class Player {
       )
     }
   }
+  printBooks() {
+    console.log(`player ${this.name} current books are: `)
+    console.log(this.books)
+  }
   updateBooks() {
     console.log('Calling updateBooks')
-    console.log(`Current books array is : ${this.books}`)
+    console.log(`${this.name} books array is : ${this.books}`)
     this.books.forEach((book) => {
       book = 0
     })
-    console.log('Reset books array')
+    console.log(`Reset books array for ${this.name}`)
     console.log(`Reset books array is now ${this.books}`)
     this.hand.forEach((card) => {
       console.log(
@@ -62,13 +67,28 @@ class Player {
       this.books[card.value] += 1
       console.log(`Books is now: ${this.books}`)
     })
-    console.log(`Books at end of function udpateBooks is: ${this.books}`)
+    console.log(
+      `Books at end of function udpateBooks for ${this.name} is: ${this.books}`
+    )
   }
+  pickRandomOpponent(playerArr) {
+    let randOpp = parseInt(Math.floor[Math.random() * playerArr.length])
+    if (randOpp === 0) {
+      console.log(`randOpp was 0`)
+      console.log(randOpp)
+      return 1
+    } else {
+      console.log(`randOpp was 1-3`)
+      return randOpp
+    }
+  }
+
   fishRandomly() {
     let randomFish = this.hand[Math.floor(Math.random() * this.hand.length)]
-    console.log(randomFish.rank)
-    console.log(randomFish.suit)
-    console.log(randomFish.value)
+    console.log(
+      `Player ${this.name} chose randomly and chose ${randomFish.rank} of ${randomFish.suit}`
+    )
+    return randomFish
   }
   isInHand(cardVal) {
     for (let i = 0; i < this.hand.length; i++) {
@@ -78,11 +98,15 @@ class Player {
     }
     return false
   }
+
+  sortHandByValue() {
+    this.hand.sort((a, b) => a.value - b.value)
+  }
 }
 
 class ComputerPlayer extends Player {
-  constructor() {
-    super()
+  constructor(name) {
+    super(name)
     this.memory = []
   }
 }
@@ -155,29 +179,79 @@ const dealCards = () => {
         allPlayers[i].printHand()
         console.log(`deck is now ${gameDeck.length} cards`)
       }
-      console.log('Calling updateBooks for each player')
+      console.log(`Calling updateBooks for player ${i}`)
       allPlayers[i].updateBooks()
+      console.log(`Calling sortHandByValue on player ${i} hands`)
+      allPlayers[i].sortHandByValue()
+      allPlayers[i].printHand()
     }
     console.log('Dealing is complete')
-
-    player.fishRandomly()
   }
 }
 
-let player = new Player()
-let player2 = new Player()
-player2.addCardToHand(new Card('Five', 'Spades', 3))
-player2.printHand()
-console.log(player2.isInHand(3))
-console.log(player2.isInHand(5))
+const playTurn = (player) => {
+  console.log(`Player ${player.name} looks at his hand: `)
+  player.printHand()
+  player.printBooks()
+
+  let playerChoiceIdx = player.pickRandomOpponent
+  let playerToPickFrom = allPlayers[1]
+  console.log(
+    `Player ${player.name} chose to pick from player ${playerToPickFrom.name}`
+  )
+  let fishingTarget = player.fishRandomly()
+  console.log(
+    `Player ${player.name} says 'do you have any ${fishingTarget.rank}s`
+  )
+  console.log(`Player ${playerToPickFrom.name} looks in his hand: `)
+  playerToPickFrom.printHand()
+  playerToPickFrom.printBooks()
+  if (playerToPickFrom.isInHand(fishingTarget.value) === true) {
+    console.log(
+      `${playerToPickFrom.name} says 'Yep! I have ${
+        playerToPickFrom.books[fishingTarget.value]
+      } of em`
+    )
+  } else {
+    console.log(`${playerToPickFrom} says 'nope! Go Fish!'`)
+    let fishMyWishCand = drawTopCard(gameDeck)
+    if (fishMyWishCand.value === fishingTarget.value) {
+      // LOOP TO START OF TURN
+      console.log(`Fished my wish!!!!`)
+    } else {
+      // NEXT PLAYERS TURN
+      console.log(`Dangit maybe next time`)
+    }
+
+    // player.printHand();
+    // player.sortHandByValue();
+    // player.printHand();
+    // player.updateBooks();
+    // player.printBooks();
+  }
+}
+
+const playGame = () => {
+  console.log('STarting game!!')
+  dealCards()
+  console.log(`calling play turn`)
+  playTurn(allPlayers[0])
+}
+
+let player1 = new Player('Jake')
+// let player2 = new Player()
+// player2.addCardToHand(new Card('Five', 'Spades', 3))
+// player2.printHand()
+// console.log(player2.isInHand(3))
+// console.log(player2.isInHand(5))
 
 let numCPU = 1
-let cpu1 = new ComputerPlayer()
-console.log(player, cpu1)
+let cpu1 = new ComputerPlayer('CPU #1')
+console.log(player1, cpu1)
 
-let allPlayers = [player, cpu1]
+let allPlayers = [player1, cpu1]
 
-newGameBtn.addEventListener('click', dealCards)
+newGameBtn.addEventListener('click', playGame)
 
 // initDeck(gameDeck)
 // printDeck(gameDeck)
