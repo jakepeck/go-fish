@@ -437,6 +437,10 @@ const clearCardsFromTable = () => {
   cardsToClear.forEach((cardStack) => {
     cardStack.parentNode.removeChild(cardStack)
   })
+  cardsToClear = document.querySelectorAll(`.card`)
+  cardsToClear.forEach((card) => {
+    card.parentNode.removeChild(card)
+  })
 }
 
 let gameRunning = true
@@ -453,21 +457,24 @@ const playGame = () => {
   console.log('STarting game!!')
   dealCards(allPlayers)
   generatePlayerHandDisplay(allPlayers[0])
+  generateOppHandDisplay(allPlayers[1])
+  generateOppHandDisplay(allPlayers[2])
+  generateOppHandDisplay(allPlayers[3])
   // console.log(`calling play turn`)
   // playTurn(allPlayers, 0, gameRunning)
-  for (let i = 0; i < 30; i++) {
-    if (getGameScore(allPlayers) === 13) {
-      break
-    }
-    printRoundStats(allPlayers, i)
+  // for (let i = 0; i < 30; i++) {
+  //   if (getGameScore(allPlayers) === 13) {
+  //     break
+  //   }
+  //   printRoundStats(allPlayers, i)
 
-    letTheRobotsPlay(allPlayers)
-    console.log(
-      `\n\n\n\n\n\ end of round ${i} current books: ${getGameScore(
-        allPlayers
-      )}\n\n\n\ `
-    )
-  }
+  //   letTheRobotsPlay(allPlayers)
+  //   console.log(
+  //     `\n\n\n\n\n\ end of round ${i} current books: ${getGameScore(
+  //       allPlayers
+  //     )}\n\n\n\ `
+  //   )
+  // }
 }
 
 const chooseCard = (e) => {
@@ -494,21 +501,11 @@ const removeEarsFromCards = () => {
 const generateOppHandDisplay = (player) => {
   let handCount = 0
   let oppHand = document.querySelector(`#${player.name} .hand`)
-  for (let i = 0; i < player.books.length; i++) {
-    if (player.books[i] > 0) {
-      let newCardStack = document.createElement('div')
-      newCardStack.classList = 'cardStack'
-      for (let j = 0; j < player.books[i]; j++) {
-        let newCard = document.createElement('div')
-        newCard.classList = `card tinyCard`
-        newCard.setAttribute('id', `faceDown`)
-        let cardInfo = player.hand[handCount]
-        newCard.innerHTML = `${cardInfo.rank} ${cardInfo.suit} ${cardInfo.value}`
-        handCount++
-        newCardStack.appendChild(newCard)
-      }
-      playerHandDisplay.appendChild(newCardStack)
-    }
+  for (let i = 0; i < player.hand.length; i++) {
+    let newOppCard = document.createElement('div')
+    newOppCard.classList = `card tinyCard`
+    newOppCard.setAttribute('id', `faceDown`)
+    oppHand.appendChild(newOppCard)
   }
 }
 
@@ -534,8 +531,9 @@ const generatePlayerHandDisplay = (player) => {
 
 const appendShark = () => {
   let shark = document.createElement('img')
+  shark.setAttribute('id', 'sharkImg')
   shark.src = 'https://i.imgur.com/LkHAYBF.jpg'
-  let container = document.querySelector('#gameContainer')
+  let container = document.querySelector('#hero')
   container.appendChild(shark)
 }
 
@@ -550,4 +548,4 @@ newGameBtn.addEventListener('click', playGame)
 // initDeck(gameDeck)
 // printDeck(gameDeck)
 
-// appendShark()
+appendShark()

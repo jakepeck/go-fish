@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&display=swap');
 /* * {
+  /*
   max-width: 90vw;
   max-height: 90vh;
   align-content: center;
-  align-self: center;
+  align-self: center;*/
+/* z-index: 0; 
 } */
 body {
   margin: 0 auto;
@@ -61,6 +63,7 @@ div {
   /* padding: 50px; */
   /* width: 70vmin;
   height: 70vmin; */
+  z-index: 1;
 }
 
 .container-3 {
@@ -133,8 +136,9 @@ div {
 
 .hand {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
   grid-template-rows: 1fr;
+  grid-auto-flow: column;
 }
 
 #cpu3 .hand {
@@ -184,7 +188,6 @@ button {
 }
 
 .card {
-  position: absolute;
   border-radius: 10px;
   border: 2px solid black;
   height: 71px;
@@ -220,4 +223,19 @@ button {
   position: absolute;
   top: 60px;
   background-color: green;
+}
+
+#sharkImg {
+  z-index: 0;
+  height: 20%;
+  position: absolute;
+}
+
+#faceDown {
+  background-color: grey;
+}
+
+.tinyCard {
+  height: 35px;
+  width: 28px;
 }
