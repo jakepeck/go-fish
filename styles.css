@@ -83,11 +83,25 @@ div {
   /* height: 200px; */
 }
 
-#cpu1 {
+#cpu2 {
   display: grid;
   grid-row: 1;
   grid-column-start: 1;
   grid-column-end: 5;
+  grid-template-rows: 2;
+}
+
+#cpu1 {
+  display: grid;
+  grid-row: 2;
+  grid-column: 1;
+  grid-template-rows: 2;
+}
+
+#cpu3 {
+  display: grid;
+  grid-row: 2;
+  grid-column: 3;
   grid-template-rows: 2;
 }
 

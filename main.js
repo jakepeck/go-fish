@@ -443,9 +443,9 @@ let gameRunning = true
 
 const playGame = () => {
   let player1 = new Player('Jake')
-  let cpu1 = new ComputerPlayer('CPU #1')
-  let cpu2 = new ComputerPlayer('CPU #2')
-  let cpu3 = new ComputerPlayer('CPU #3')
+  let cpu1 = new ComputerPlayer('cpu1')
+  let cpu2 = new ComputerPlayer('cpu2')
+  let cpu3 = new ComputerPlayer('cpu3')
   console.log(player1, cpu1, cpu2, cpu3)
 
   let allPlayers = [player1, cpu1, cpu2, cpu3]
@@ -474,6 +474,7 @@ const chooseCard = (e) => {
   console.log('Card was clicked!!!!')
   let infoString = e.target.innerHTML
   console.log(`Card was ${infoString}`)
+  removeEarsFromCards()
 }
 
 const addEarsToCards = () => {
@@ -481,6 +482,34 @@ const addEarsToCards = () => {
   playerHand.forEach((cardStack) => {
     let newListener = cardStack.addEventListener('click', chooseCard)
   })
+}
+
+const removeEarsFromCards = () => {
+  let playerHand = document.querySelectorAll(`#player .hand`)
+  playerHand.forEach((cardStack) => {
+    cardStack.removeEventListener('click', chooseCard)
+  })
+}
+
+const generateOppHandDisplay = (player) => {
+  let handCount = 0
+  let oppHand = document.querySelector(`#${player.name} .hand`)
+  for (let i = 0; i < player.books.length; i++) {
+    if (player.books[i] > 0) {
+      let newCardStack = document.createElement('div')
+      newCardStack.classList = 'cardStack'
+      for (let j = 0; j < player.books[i]; j++) {
+        let newCard = document.createElement('div')
+        newCard.classList = `card tinyCard`
+        newCard.setAttribute('id', `faceDown`)
+        let cardInfo = player.hand[handCount]
+        newCard.innerHTML = `${cardInfo.rank} ${cardInfo.suit} ${cardInfo.value}`
+        handCount++
+        newCardStack.appendChild(newCard)
+      }
+      playerHandDisplay.appendChild(newCardStack)
+    }
+  }
 }
 
 const generatePlayerHandDisplay = (player) => {
