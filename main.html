@@ -6,38 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GO FISH</title>
   <script defer src="main.js"></script>
+  
   <link rel="stylesheet" type="text/css" media="screen" href="styles.css">
 </head>
 
 <ul>
   <li><a href='main.html'>Play Game</a></li>
   <li><a href='index.html'>Instructions</a></li>
+  <li><button id='newGame'>New Game!</button></li>
 </ul>
 
 <body>
   <div id='hero'>
-    <button id='newGame'>New Game!</button>
-    <p>Game Container Goes Below Here!</p>
+    
+    
     <div id='gameContainer'>
 
+      <div id ='oppsAndDeck'>
         <div id='cpu1'>
-
           <div class='hand'>CPU hand</div>
           <div class='books'>CPU books</div>
-
-
-
         </div>
-
         <div id='deck'>Deck</div>
-        
-        <div id='player'>
-
-          <div class='hand'>player books</div>
-          <div class='books'>player hand</div>
-
-
-        </div>
+      </div>
+              
+      <div id='player'>
+        <div class='books'>player books</div>
+        <div class='hand'></div>
+      </div>
 
       
   
