@@ -312,12 +312,16 @@ const letTheHumanFish = (playerToFishFromID, cardValueToFishFor) => {
         console.log('Fished my wish! I get to go again')
         // TIME TO RESET THE PLAYER CHOICE EVENT LISTENERS
         goAgain = true
+        console.log('who do you want to pick from')
+        addEarsToOpponents()
       }
     }
 
     if (goAgain === false) {
       console.log('time to let the cpus play a round')
       letTheRobotsPlay(allPlayers)
+      console.log('who do you want to pick from')
+      addEarsToOpponents()
     }
   }
 }
@@ -534,6 +538,8 @@ const playGame = () => {
   generateOppHandDisplay(allPlayers[1])
   generateOppHandDisplay(allPlayers[2])
   generateOppHandDisplay(allPlayers[3])
+  console.log('who do you want to pick from')
+  addEarsToOpponents()
   // console.log(`calling play turn`)
   // playTurn(allPlayers, 0, gameRunning)
   // for (let i = 0; i < 30; i++) {
@@ -580,6 +586,9 @@ const choosePlayer = (e) => {
   console.log(e.target.parentNode)
   console.log(e.target.parentNode.parentNode.id)
   let infoString = e.target.parentNode.parentNode.id
+  if (infoString === 'oppsAndDeck') {
+    infoString = e.target.parentNode.id
+  }
   console.log(`Player ${infoString} was picked`)
   playerTarget = infoString
   removeEarsFromOpponents()
@@ -620,6 +629,7 @@ const generateOppHandDisplay = (player) => {
     let newOppCard = document.createElement('div')
     newOppCard.classList = `card tinyCard`
     newOppCard.setAttribute('id', `faceDown`)
+    newOppCard.style.left = `${i * 10}px`
     oppHand.appendChild(newOppCard)
   }
 }
@@ -642,8 +652,6 @@ const generatePlayerHandDisplay = (player) => {
       playerHandDisplay.appendChild(newCardStack)
     }
   }
-  console.log('who do you want to pick from')
-  addEarsToOpponents()
 }
 
 const appendShark = () => {
