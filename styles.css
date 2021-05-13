@@ -224,6 +224,7 @@ button {
   text-align: center;
   align-content: center;
   width: 100px;
+  margin: 10px auto;
 }
 
 .card {
@@ -284,4 +285,11 @@ button {
 .oppCardContainer {
   position: relative;
   display: grid;
+}
+
+#instructions {
+  background-color: whitesmoke;
+  max-width: 80vw;
+  padding: 25px;
+  margin: 0 auto;
 }

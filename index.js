@@ -127,23 +127,12 @@ class Player {
     console.log(this.books)
   }
   updateBooks() {
-    // console.log('Calling updateBooks')
-    // console.log(`${this.name} books array is : ${this.books}`)
     for (let i = 0; i < this.books.length; i++) {
       this.books[i] = 0
     }
-    // console.log(`Reset books array for ${this.name}`)
-    // console.log(`Reset books array is now ${this.books}`)
     this.hand.forEach((card) => {
-      // console.log(
-      //   `Card is: ${card.rank} of ${card.suit} value is ${card.value}`
-      // )
       this.books[card.value] += 1
-      // console.log(`Books is now: ${this.books}`)
     })
-    // console.log(
-    //   `Books at end of function updateBooks for ${this.name} is: ${this.books}`
-    // )
 
     for (let i = 0; i < this.books.length; i++) {
       if (this.books[i] === 4) {
@@ -159,20 +148,13 @@ class Player {
     // function to remove 4 cards in case of book, or all cards of card value
     // if fished  by an opponent
     let cardsToRemove = []
-    // console.log(`calling removeCardsFromHand`)
     this.sortHandByValue()
-    // console.log(
-    //   `card value to remove: ${cardVal} number to remove: ${numCards}`
-    // )
-    // console.log(this.hand)
     for (let i = 0; i < this.hand.length; i++) {
       if (
         this.hand[i].value === cardVal &&
         numCards === this.books[this.hand[i].value]
       ) {
         cardsToRemove = this.hand.splice(i, numCards)
-        // console.log('Just spliced')
-        // console.log(this.hand)
       }
     }
     this.updateBooks()
@@ -182,22 +164,14 @@ class Player {
   pickRandomOpponent(playerArr, currentPlayer) {
     let randOpp = Math.floor(Math.random() * playerArr.length)
     if (randOpp === currentPlayer) {
-      // console.log(`randOpp was same as player`)
-      // console.log(randOpp)
       return this.pickRandomOpponent(playerArr, currentPlayer)
     } else {
-      // console.log(
-      //   `randOpp was opponent number: ${randOpp} and the currentPlayer was ${currentPlayer}`
-      // )
       return randOpp
     }
   }
 
   fishRandomly() {
     let randomFish = this.hand[Math.floor(Math.random() * this.hand.length)]
-    // console.log(
-    //   `Player ${this.name} chose randomly and chose ${randomFish.rank} of ${randomFish.suit}`
-    // )
     return randomFish
   }
   isInHand(cardVal) {
@@ -251,29 +225,14 @@ const shuffleDeck = (deck) => {
 }
 
 const drawTopCard = (deck) => {
-  // console.log(
-  //   `top of deck is ${deck[0].rank} of ${deck[0].suit}, bottom of deck is:  ${
-  //     deck[deck.length - 1].rank
-  //   } of ${deck[deck.length - 1].suit}`
-  // )
   let cardDrawn = deck.shift()
-  console.log(cardDrawn)
-  // console.log(
-  //   `new top of deck is: ${deck[0].rank} of ${deck[0].suit}, last card : ${
-  //     deck[deck.length - 1].rank
-  //   } of ${deck[deck.length - 1].suit}`
-  // )
   return cardDrawn
 }
 
 const dealCards = (allPlayers) => {
   console.log('deal cards clicked')
   initDeck(gameDeck)
-  // console.log('initialized deck is: ')
-  // printDeck(gameDeck)
-  // console.log('Shuffled deck is: ')
   shuffleDeck(gameDeck)
-  // printDeck(gameDeck)
 
   if (allPlayers.length === 2) {
     // console.log('Dealing has begun')
@@ -301,20 +260,11 @@ const dealCards = (allPlayers) => {
     for (let i = 0; i < allPlayers.length; i++) {
       // 3-4 players so 5 cards dealt to each
       for (let j = 0; j < 5; j++) {
-        // console.log(gameDeck.length)
         let cardDrawn = drawTopCard(gameDeck)
-        // console.log(
-        //   `player ${allPlayers[i].name} has drawn card: ${cardDrawn.rank} of ${cardDrawn.suit}`
-        // )
         allPlayers[i].addCardToHand(cardDrawn)
-        allPlayers[i].printHand()
-        // console.log(`deck is now ${gameDeck.length} cards`)
       }
-      // console.log(`Calling updateBooks for player ${i}`)
       allPlayers[i].updateBooks()
-      // console.log(`Calling sortHandByValue on player ${i} hands`)
       allPlayers[i].sortHandByValue()
-      allPlayers[i].printHand()
     }
     // console.log('Dealing is complete')
   }
@@ -460,23 +410,9 @@ const letTheRobotsPlay = (players) => {
           player.updateBooks()
           generateOppHandDisplay(player)
           if (fishMyWishCand.value === fishingTarget.value) {
-            // LOOP TO START OF TURN
             cardsFishedAndOrWished++
             // console.log(`Fished my wish!!!!`)
-            // player.printHand()
-            // player.sortHandByValue()
-            // player.printHand()
-            // player.updateBooks()
-            // player.printBooks()
             i--
-          } else {
-            // NEXT PLAYERS TURN
-            // console.log(`Dangit maybe next time`)
-            // player.printHand()
-            // player.sortHandByValue()
-            // player.printHand()
-            // player.updateBooks()
-            // player.printBooks()
           }
         } else {
           // NEXT PLAYERS TURN
@@ -491,54 +427,6 @@ const letTheRobotsPlay = (players) => {
     }
   }
 }
-
-// const playTurn = (players, playerIdx, gameRunning) => {
-//   if (gameRunning === true) {
-//     let player = players[playerIdx]
-//     // console.log(`Player ${player.name} looks at his hand: `)
-//     // player.printHand()
-//     // player.printBooks()
-
-//     let playerChoiceIdx = player.pickRandomOpponent
-//     let playerToPickFrom = allPlayers[1]
-//     console.log(
-//       `Player ${player.name} chose to pick from player ${playerToPickFrom.name}`
-//     )
-//     let fishingTarget = player.fishRandomly()
-//     console.log(
-//       `Player ${player.name} says 'do you have any ${fishingTarget.rank}s`
-//     )
-//     // console.log(`Player ${playerToPickFrom.name} looks in his hand: `)
-//     // playerToPickFrom.printHand()
-//     // playerToPickFrom.printBooks()
-//     if (playerToPickFrom.isInHand(fishingTarget.value) === true) {
-//       console.log(
-//         `${playerToPickFrom.name} says 'Yep! I have ${
-//           playerToPickFrom.books[fishingTarget.value]
-//         } of em`
-//       )
-//     } else {
-//       console.log(`${playerToPickFrom} says 'nope! Go Fish!'`)
-//       let fishMyWishCand = drawTopCard(gameDeck)
-//       player.addCardToHand(fishMyWishCand)
-//       if (fishMyWishCand.value === fishingTarget.value) {
-//         // LOOP TO START OF TURN
-//         console.log(`Fished my wish!!!!`)
-//         player.printHand()
-//         player.sortHandByValue()
-//         player.printHand()
-//         player.updateBooks()
-//         player.printBooks()
-//       } else {
-//         // NEXT PLAYERS TURN
-//         console.log(`Dangit maybe next time`)
-//       }
-//     }
-//   } else {
-//     console.log('GAme is over!!')
-//     return
-//   }
-// }
 
 const printRoundStats = (players, round) => {
   for (let i = 0; i < players.length; i++) {
