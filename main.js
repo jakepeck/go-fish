@@ -37,11 +37,15 @@ class Player {
   }
   addCardToHand(card) {
     this.hand.push(card)
+    this.sortHandByValue()
+    this.updateBooks()
   }
   addCardsToHand(cards) {
     for (let i = 0; i < cards.length; i++) {
       this.addCardToHand(cards[i])
     }
+    this.updateBooks()
+    this.sortHandByValue()
   }
   printHand() {
     console.log(`player ${this.name} current hand is: `)
@@ -85,6 +89,8 @@ class Player {
         console.log(`\n\n\n-----FINALLY A BOOK FOUND!!!!----\n\n\n`)
         this.removeCardsFromHand(i, 4)
         this.numBooks++
+        let scoreDisplay = document.querySelector(`#${this.name} .scoreDisplay`)
+        scoreDisplay++
       }
     }
   }
@@ -294,6 +300,7 @@ const letTheHumanFish = (playerToFishFromID, cardValueToFishFor) => {
       playerToFishFrom.books[cardValueToFishFor]
     )
     humanPlayer.addCardsToHand(cardsFished)
+    humanPlayer.updateBooks()
     generatePlayerHandDisplay(humanPlayer)
     generateOppHandDisplay(playerToFishFrom)
   } else {
@@ -516,7 +523,7 @@ const clearCardsFromTable = () => {
 
 let gameRunning = true
 
-let player1 = new Player('Jake')
+let player1 = new Player('player')
 let cpu1 = new ComputerPlayer('cpu1')
 let cpu2 = new ComputerPlayer('cpu2')
 let cpu3 = new ComputerPlayer('cpu3')
@@ -524,7 +531,7 @@ console.log(player1, cpu1, cpu2, cpu3)
 let allPlayers = [player1, cpu1, cpu2, cpu3]
 
 const playGame = () => {
-  player1 = new Player('Jake')
+  player1 = new Player('player')
   cpu1 = new ComputerPlayer('cpu1')
   cpu2 = new ComputerPlayer('cpu2')
   cpu3 = new ComputerPlayer('cpu3')
@@ -625,13 +632,19 @@ const generateOppHandDisplay = (player) => {
   clearOppCardDisplay(player)
   let handCount = 0
   let oppHand = document.querySelector(`#${player.name} .hand`)
+  // let oppCardCont = document.createElement('div')
+  // oppCardCont.classList = `oppCardContainer`
+  let rotFactor = 180 / (player.hand.length - 1)
   for (let i = 0; i < player.hand.length; i++) {
     let newOppCard = document.createElement('div')
     newOppCard.classList = `card tinyCard`
     newOppCard.setAttribute('id', `faceDown`)
-    newOppCard.style.left = `${i * 10}px`
+    newOppCard.style.left = `${i * 5}px`
+    // newOppCard.style.transform = `rotate(${270 + rotFactor * i}deg)`
     oppHand.appendChild(newOppCard)
   }
+  oppHand.style.margin = `0px 0px 0px -${player.hand.length * 5}px`
+  // oppHand.appendChild(oppCardCont)
 }
 
 const generatePlayerHandDisplay = (player) => {
