@@ -33,3 +33,4 @@ ___
 ___
 - First off, I'd like to thank the creators of Flexbox and Grid! You can find their documentation here: [Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) | [Grid](https://css-tricks.com/snippets/css/complete-guide-grid/) 
 - Additionally, for all card stacking I used the following resource. This is an incredible tool that I think anyone who wants to dynamically create elements for grid should check out: [CSS Tricks for Stacking Divs](https://css-tricks.com/how-to-stack-elements-in-css/)
+- Lastly, I'd like to thank my wonderful classmates, and my even more wonderful instructors Andre Pato and Michael Lackey. Big thanks to both for being great teachers, and even bigger thanks to Michael for providing me the card images!
