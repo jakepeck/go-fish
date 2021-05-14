@@ -1,12 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@1,700&display=swap');
-/* * {
-  /*
-  max-width: 90vw;
-  max-height: 90vh;
-  align-content: center;
-  align-self: center;*/
-/* z-index: 0; 
-} */
+
 body {
   margin: 0 auto;
   text-align: center;
@@ -55,9 +48,6 @@ div {
   margin: 10px auto;
   background-color: black;
   color: black;
-  /* padding: 50px; */
-  /* width: 70vmin;
-  height: 70vmin; */
   z-index: 1;
   justify-items: center;
 }
@@ -89,7 +79,6 @@ div {
   grid-template-columns: 1fr 1fr 1fr;
   border: 4px solid black;
   background-color: red;
-  /* grid-gap: 10px; */
   max-width: 500px;
   min-width: 500px;
   max-height: 250px;
@@ -102,16 +91,10 @@ div {
 
 #player {
   display: grid;
-  /* grid-row: 3;
-  grid-column-start: 1;
-  grid-column-end: 5; */
   grid-template-columns: 5fr 1fr;
   grid-template-rows: 1fr;
   align-content: center;
-  /* height: 200px; */
-  /* max-width: 60vw; */
   background-color: red;
-  /* height: 20vh; */
   min-height: 150px;
   max-height: 150px;
   max-width: 60vw;
@@ -125,7 +108,6 @@ div {
   grid-row: 1;
   grid-column: 2;
   grid-template-rows: 1fr 1fr;
-  /* margin: 10px 50px 0 50px; */
   align-self: center;
   justify-content: center;
   position: relative;
@@ -136,8 +118,6 @@ div {
   grid-row: 1;
   grid-column: 1;
   grid-template-rows: 1fr 1fr;
-  /* transform: rotate(90deg); */
-  /* margin: 0 0 10px 10px; */
   align-self: center;
   position: relative;
   justify-content: center;
@@ -148,7 +128,6 @@ div {
   grid-row: 1;
   grid-column: 3;
   grid-template-rows: 1fr 1fr;
-  /* margin: 0 10px 10px 0; */
   align-self: center;
   position: relative;
 }
@@ -175,7 +154,6 @@ div {
 
 .books {
   display: grid;
-  /* grid-template-columns: repeat(auto-fit, minmax(10px, 1fr)); */
   margin: 10px;
 }
 
@@ -198,7 +176,6 @@ h4 {
   background-size: 100%;
   border: 2px solid black;
   border-radius: 10px;
-  /* margin: 50px 0 0 0; */
 }
 
 .emptyDeck {
