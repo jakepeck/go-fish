@@ -1,4 +1,3 @@
-// console.log('madeit to the main page i see')
 const playerHandDisplay = document.querySelector(`#player .hand`)
 const newGameBtn = document.querySelector('#newGame')
 const gameDeck = []
@@ -79,6 +78,14 @@ const spades = [
   'images/spades/spades-A.svg'
 ]
 
+const gameLog = document.querySelector(`#logDisplay`)
+
+const logToGameLog = (string) => {
+  let stringToAdd = document.createElement('p')
+  stringToAdd.innerText = string
+  gameLog.appendChild(stringToAdd)
+}
+
 let cardsFishedAndOrWished = 0
 
 class Card {
@@ -109,10 +116,9 @@ class Player {
     this.sortHandByValue()
   }
   printHand() {
-    console.log(`player ${this.name} current hand is: `)
+    logToGameLog(`player ${this.name} current hand is: `)
     for (let i = 0; i < this.hand.length; i++) {
-      // console.log(typeof this.hand[i].value)
-      console.log(
+      logToGameLog.log(
         this.hand[i].rank +
           ' of ' +
           this.hand[i].suit +
@@ -120,11 +126,11 @@ class Player {
           this.hand[i].value
       )
     }
-    console.log(this.hand)
+    logToGameLog(this.hand)
   }
   printBooks() {
-    console.log(`player ${this.name} current books are: `)
-    console.log(this.books)
+    logToGameLog(`player ${this.name} current books are: `)
+    logToGameLog(this.books)
   }
   updateBooks() {
     for (let i = 0; i < this.books.length; i++) {
@@ -136,7 +142,7 @@ class Player {
 
     for (let i = 0; i < this.books.length; i++) {
       if (this.books[i] === 4) {
-        console.log(`\n\n\n-----FINALLY A BOOK FOUND!!!!----\n\n\n`)
+        logToGameLog(`${this.name} completed a book of ${ranks[i]}s!`)
         this.removeCardsFromHand(i, 4)
         this.numBooks++
         let scoreDisplay = document.querySelector(`#${this.name} h4`)
@@ -148,16 +154,15 @@ class Player {
     // function to remove 4 cards in case of book, or all cards of card value
     // if fished  by an opponent
     let cardsToRemove = []
-    this.sortHandByValue()
     for (let i = 0; i < this.hand.length; i++) {
       if (
-        this.hand[i].value === cardVal &&
-        numCards === this.books[this.hand[i].value]
+        this.hand[i].value === parseInt(cardVal) &&
+        parseInt(numCards) === this.books[this.hand[i].value]
       ) {
         cardsToRemove = this.hand.splice(i, numCards)
       }
     }
-    this.updateBooks()
+
     return cardsToRemove
   }
 
@@ -175,12 +180,13 @@ class Player {
     return randomFish
   }
   isInHand(cardVal) {
+    let isThere = false
     for (let i = 0; i < this.hand.length; i++) {
-      if (this.hand[i].value === cardVal) {
-        return true
+      if (this.hand[i].value === parseInt(cardVal)) {
+        isThere = true
       }
     }
-    return false
+    return isThere
   }
 
   sortHandByValue() {
@@ -211,7 +217,7 @@ const initDeck = (deck) => {
 
 const printDeck = (deck) => {
   for (let i = 0; i < deck.length; i++) {
-    console.log(deck[i])
+    logToGameLog(deck[i])
   }
 }
 
@@ -225,38 +231,30 @@ const shuffleDeck = (deck) => {
 }
 
 const drawTopCard = (deck) => {
-  let cardDrawn = deck.shift()
-  return cardDrawn
+  if (deck.length > 0) {
+    let cardDrawn = deck.shift()
+    return cardDrawn
+  } else {
+    gameDeck.classList = 'emptyDeck'
+  }
 }
 
 const dealCards = (allPlayers) => {
-  console.log('deal cards clicked')
   initDeck(gameDeck)
   shuffleDeck(gameDeck)
+  logToGameLog('Dealing has begun!')
 
   if (allPlayers.length === 2) {
-    // console.log('Dealing has begun')
     for (let i = 0; i < allPlayers.length; i++) {
       // 2 players so 7 cards dealt to each
       for (let j = 0; j < 7; j++) {
-        // console.log(gameDeck.length)
         let cardDrawn = drawTopCard(gameDeck)
-        // console.log(
-        //   `player ${allPlayers[i].name} has drawn card: ${cardDrawn.rank} of ${cardDrawn.suit}`
-        // )
         allPlayers[i].addCardToHand(cardDrawn)
-        allPlayers[i].printHand()
-        // console.log(`deck is now ${gameDeck.length} cards`)
       }
-      // console.log(`Calling updateBooks for player ${i}`)
       allPlayers[i].updateBooks()
-      // console.log(`Calling sortHandByValue on player ${i} hands`)
       allPlayers[i].sortHandByValue()
-      allPlayers[i].printHand()
     }
-    // console.log('Dealing is complete')
   } else {
-    // console.log('Dealing has begun')
     for (let i = 0; i < allPlayers.length; i++) {
       // 3-4 players so 5 cards dealt to each
       for (let j = 0; j < 5; j++) {
@@ -266,7 +264,7 @@ const dealCards = (allPlayers) => {
       allPlayers[i].updateBooks()
       allPlayers[i].sortHandByValue()
     }
-    // console.log('Dealing is complete')
+    logToGameLog('Dealing is complete')
   }
 }
 
@@ -300,46 +298,53 @@ const letTheHumanFish = (playerToFishFromID, cardValueToFishFor) => {
   let humanPlayer = allPlayers[0]
   let playerIndex = playerToFishFromID[playerToFishFromID.length - 1]
   let playerToFishFrom = allPlayers[playerIndex]
-  console.log(
-    `letTheHumanFish has been called the player to fish from is ${playerToFishFromID} and the playerIndex is ${playerIndex}`
+  logToGameLog(
+    `You ask ${playerToFishFromID} for any ${ranks[cardValueToFishFor]}s`
   )
+
   if (playerToFishFrom.isInHand(cardValueToFishFor) === true) {
-    console.log(`The card you fished for was in ${playerToFishFromID}'s hand`)
+    goAgain = true
+    logToGameLog(
+      `${playerToFishFrom.name} says "I have ${playerToFishFrom.books[cardValueToFishFor]} of them"`
+    )
     cardsFishedAndOrWished++
     let cardsFished = playerToFishFrom.removeCardsFromHand(
       cardValueToFishFor,
       playerToFishFrom.books[cardValueToFishFor]
     )
     humanPlayer.addCardsToHand(cardsFished)
+
+    humanPlayer.updateBooks()
+    humanPlayer.sortHandByValue()
     generatePlayerHandDisplay(humanPlayer)
     generateOppHandDisplay(playerToFishFrom)
   } else {
-    console.log('Not in their hand! Time to draw')
+    logToGameLog(`${playerToFishFrom.name} says "Go fish!"`)
     if (gameDeck.length > 0) {
-      console.log('player hand before drawing:')
-      humanPlayer.printHand()
       let fishMyWishCand = drawTopCard(gameDeck)
       humanPlayer.addCardToHand(fishMyWishCand)
-
       humanPlayer.updateBooks()
-      console.log('after')
-      humanPlayer.printHand()
+      humanPlayer.sortHandByValue()
       generatePlayerHandDisplay(humanPlayer)
       if (fishMyWishCand.value === cardValueToFishFor) {
-        console.log('Fished my wish! I get to go again')
+        logToGameLog('You fished your wish! You get to go again')
         // TIME TO RESET THE PLAYER CHOICE EVENT LISTENERS
         goAgain = true
-        console.log('who do you want to pick from')
-        addEarsToOpponents()
       }
     }
+  }
 
-    if (goAgain === false) {
-      console.log('time to let the cpus play a round')
-      letTheRobotsPlay(allPlayers)
-      console.log('who do you want to pick from')
-      addEarsToOpponents()
-    }
+  if (goAgain === false) {
+    letTheRobotsPlay(allPlayers)
+    logToGameLog(
+      `Who do you want to pick from next? Click on an opponent's hand`
+    )
+    addEarsToOpponents()
+  } else {
+    logToGameLog(
+      `Who do you want to pick from next? Click on an opponent's hand`
+    )
+    addEarsToOpponents()
   }
 }
 
@@ -347,14 +352,12 @@ const letTheRobotsPlay = (players) => {
   for (let i = 1; i < players.length; i++) {
     if (getGameScore(players) === 13) {
       let winString = getWinner(players)
-      console.log(`Game over!!!!!!!THE WINNER ISSS........... ${winString}`)
+      logToGameLog(`Game over! THE WINNER IS........... ${winString}`)
       return 0
     }
 
     let player = players[i]
-    console.log(`Player ${player.name} TURN`)
-    // player.printHand()
-    // player.printBooks()
+    logToGameLog(`Player ${player.name}'s Turn!`)
     if (player.hand.length === 0 && gameDeck.length === 0) {
     } else {
       if (player.hand.length === 0 && gameDeck.length > 0) {
@@ -365,25 +368,41 @@ const letTheRobotsPlay = (players) => {
       }
 
       let playerChoiceIdx = player.pickRandomOpponent(players, i)
-      // console.log(playerChoiceIdx)
       let playerToPickFrom = players[playerChoiceIdx]
-      // console.log(
-      //   `Player ${player.name} chose to pick from player ${playerToPickFrom.name}`
-      // )
+      if (playerChoiceIdx === 0) {
+        logToGameLog(`Player ${player.name} chose to fish from you`)
+      } else {
+        logToGameLog(
+          `Player ${player.name} chose to fish from ${playerToPickFrom.name}`
+        )
+      }
+
       let fishingTarget = player.fishRandomly()
-      // console.log(
-      //   `Player ${player.name} says 'do you have any ${fishingTarget.rank}s to ${playerToPickFrom.name}`
-      // )
-      // console.log(`Player ${playerToPickFrom.name} looks in his hand: `)
-      // playerToPickFrom.printHand()
-      // playerToPickFrom.printBooks()
+      if (playerChoiceIdx === 0) {
+        logToGameLog(
+          `Player ${player.name} asks you "Do you have any ${fishingTarget.rank}s?`
+        )
+      } else {
+        logToGameLog(
+          `Player ${player.name} says "Do you have any ${fishingTarget.rank}s?" to ${playerToPickFrom.name}`
+        )
+      }
 
       if (playerToPickFrom.isInHand(fishingTarget.value) === true) {
-        // console.log(
-        //   `${playerToPickFrom.name} says 'Yep! I have ${
-        //     playerToPickFrom.books[fishingTarget.value]
-        //   } of em`
-        //)
+        if (playerChoiceIdx === 0) {
+          logToGameLog(
+            `You say "Yep! I have ${
+              playerToPickFrom.books[fishingTarget.value]
+            } of em"`
+          )
+        } else {
+          logToGameLog(
+            `${playerToPickFrom.name} says "Yep! I have ${
+              playerToPickFrom.books[fishingTarget.value]
+            } of em"`
+          )
+        }
+
         cardsFishedAndOrWished++
         let cardsFished = playerToPickFrom.removeCardsFromHand(
           fishingTarget.value,
@@ -391,37 +410,39 @@ const letTheRobotsPlay = (players) => {
         )
         player.addCardsToHand(cardsFished)
         player.updateBooks()
+        player.sortHandByValue()
         generateOppHandDisplay(player)
 
         if (playerChoiceIdx === 0) {
           generatePlayerHandDisplay(playerToPickFrom)
         }
-        // player.printHand()
-        // player.printBooks()
-        // playerToPickFrom.printHand()
-        // playerToPickFrom.printBooks()
+
         i--
       } else {
-        // console.log(`${playerToPickFrom.name} says 'nope! Go Fish!'`)
+        if (playerChoiceIdx === 0) {
+          logToGameLog(`You say "Nope! Go Fish!"`)
+        } else {
+          logToGameLog(`${playerToPickFrom.name} says "Nope! Go Fish!"`)
+        }
+
         if (gameDeck.length > 0) {
           let fishMyWishCand = drawTopCard(gameDeck)
           player.addCardToHand(fishMyWishCand)
-          player.sortHandByValue()
           player.updateBooks()
+          player.sortHandByValue()
           generateOppHandDisplay(player)
           if (fishMyWishCand.value === fishingTarget.value) {
             cardsFishedAndOrWished++
-            // console.log(`Fished my wish!!!!`)
+            logToGameLog(
+              `${player.name} fished their wish! They get to go again`
+            )
             i--
           }
         } else {
           // NEXT PLAYERS TURN
-          // console.log(`Dangit no more cards left.... TIME TO GUESS`)
-          // player.printHand()
-          player.sortHandByValue()
-          // player.printHand()
+
           player.updateBooks()
-          // player.printBooks()
+          player.sortHandByValue()
         }
       }
     }
@@ -430,16 +451,16 @@ const letTheRobotsPlay = (players) => {
 
 const printRoundStats = (players, round) => {
   for (let i = 0; i < players.length; i++) {
-    console.log(`\n\n\n----------Round Number ${round}--------------\n\n\n`)
-    console.log(`Cards left in deck: ${gameDeck.length}`)
-    console.log(
+    logToGameLog(`\n\n\n----------Round Number ${round}--------------\n\n\n`)
+    logToGameLog(`Cards left in deck: ${gameDeck.length}`)
+    logToGameLog(
       `Number of cards in ${players[i].name}'s hand: ${players[i].hand.length}`
     )
-    console.log(
+    logToGameLog(
       `Number of books found by ${players[i].name} thus far: ${players[i].numBooks}`
     )
-    console.log(
-      `number of cards fished or wished so far: ${cardsFishedAndOrWished}`
+    logToGameLog(
+      `Number of cards fished or wished so far: ${cardsFishedAndOrWished}`
     )
   }
 }
@@ -475,7 +496,6 @@ let player1 = new Player('player')
 let cpu1 = new ComputerPlayer('cpu1')
 let cpu2 = new ComputerPlayer('cpu2')
 let cpu3 = new ComputerPlayer('cpu3')
-console.log(player1, cpu1, cpu2, cpu3)
 let allPlayers = [player1, cpu1, cpu2, cpu3]
 
 const playGame = () => {
@@ -483,44 +503,25 @@ const playGame = () => {
   cpu1 = new ComputerPlayer('cpu1')
   cpu2 = new ComputerPlayer('cpu2')
   cpu3 = new ComputerPlayer('cpu3')
-  console.log(player1, cpu1, cpu2, cpu3)
 
   allPlayers = [player1, cpu1, cpu2, cpu3]
   clearCardsFromTable()
-  console.log('STarting game!!')
+  logToGameLog('Starting new game!!!')
   dealCards(allPlayers)
   generatePlayerHandDisplay(allPlayers[0])
   generateOppHandDisplay(allPlayers[1])
   generateOppHandDisplay(allPlayers[2])
   generateOppHandDisplay(allPlayers[3])
-  console.log('who do you want to pick from')
+  logToGameLog(`Who do you want to pick from? Click an opponent's hand`)
   addEarsToOpponents()
-  // console.log(`calling play turn`)
-  // playTurn(allPlayers, 0, gameRunning)
-  // for (let i = 0; i < 30; i++) {
-  //   if (getGameScore(allPlayers) === 13) {
-  //     break
-  //   }
-  //   printRoundStats(allPlayers, i)
-
-  //   letTheRobotsPlay(allPlayers)
-  //   console.log(
-  //     `\n\n\n\n\n\ end of round ${i} current books: ${getGameScore(
-  //       allPlayers
-  //     )}\n\n\n\ `
-  //   )
-  // }
 }
 
 const addEarsToOpponents = () => {
   let opponents = document.querySelector(`#cpu1 .hand`)
-  // opponents.innerHTML = 'cpu1'
   opponents.addEventListener('click', choosePlayer)
   let opponents2 = document.querySelector(`#cpu2 .hand`)
-  // opponents2.innerHTML = 'cpu2'
   opponents2.addEventListener('click', choosePlayer)
   let opponents3 = document.querySelector(`#cpu3 .hand`)
-  // opponents3.innerHTML = 'cpu3'
   opponents3.addEventListener('click', choosePlayer)
 }
 
@@ -537,29 +538,30 @@ let playerTarget = ''
 let cardTarget = 0
 
 const choosePlayer = (e) => {
-  console.log('A player was picked!')
-  console.log(e.target.parentNode)
-  console.log(e.target.parentNode.parentNode.id)
   let infoString = e.target.parentNode.parentNode.id
   if (infoString === 'oppsAndDeck') {
     infoString = e.target.parentNode.id
   }
-  console.log(`Player ${infoString} was picked`)
+  logToGameLog(`You chose to fish from ${infoString}`)
   playerTarget = infoString
   removeEarsFromOpponents()
-  console.log('Make your choice for your card')
+  logToGameLog('Click a card in your hand to fish for!')
   addEarsToCards()
 }
 
 const chooseCard = (e) => {
-  console.log(playerTarget)
-  console.log('Card was clicked!!!!')
   let infoString = e.target.innerHTML
-  console.log(`Card was ${infoString}`)
   cardTarget = infoString
   removeEarsFromCards()
   // now we have chosen a player and a card, we need to run game logic
-  letTheHumanFish(playerTarget, infoString[infoString.length - 1])
+  if (infoString[infoString.length - 2] === ' ') {
+    letTheHumanFish(playerTarget, infoString[infoString.length - 1])
+  } else {
+    letTheHumanFish(
+      playerTarget,
+      infoString[infoString.length - 2] + infoString[infoString.length - 1]
+    )
+  }
 }
 
 const addEarsToCards = () => {
@@ -580,19 +582,14 @@ const generateOppHandDisplay = (player) => {
   clearOppCardDisplay(player)
   let handCount = 0
   let oppHand = document.querySelector(`#${player.name} .hand`)
-  // let oppCardCont = document.createElement('div')
-  // oppCardCont.classList = `oppCardContainer`
-  let rotFactor = 180 / (player.hand.length - 1)
   for (let i = 0; i < player.hand.length; i++) {
     let newOppCard = document.createElement('div')
     newOppCard.classList = `card tinyCard`
     newOppCard.setAttribute('id', `faceDown`)
     newOppCard.style.left = `${i * 5}px`
-    // newOppCard.style.transform = `rotate(${270 + rotFactor * i}deg)`
     oppHand.appendChild(newOppCard)
   }
   oppHand.style.margin = `0px 0px 0px -${player.hand.length * 1}px`
-  // oppHand.appendChild(oppCardCont)
 }
 
 const getCardImg = (cardValue, cardSuit) => {
@@ -609,6 +606,7 @@ const getCardImg = (cardValue, cardSuit) => {
 
 const generatePlayerHandDisplay = (player) => {
   clearPlayerCardDisplay()
+  player.updateBooks()
   let handCount = 0
   for (let i = 0; i < player.books.length; i++) {
     if (player.books[i] > 0) {
@@ -621,9 +619,7 @@ const generatePlayerHandDisplay = (player) => {
         newCard.innerHTML = `${cardInfo.rank} ${cardInfo.suit} ${cardInfo.value}`
         let bg = getCardImg(cardInfo.value, cardInfo.suit)
         newCard.style.backgroundImage = `url(${bg})`
-        newCard.style.backgroundSize = '98%'
-        console.log(bg)
-        // newCard.style.backgroundImg = getCardImg(cardInfo.value, cardInfo.suit)
+        newCard.style.backgroundSize = '100%'
         handCount++
         newCardStack.appendChild(newCard)
       }
@@ -632,23 +628,4 @@ const generatePlayerHandDisplay = (player) => {
   }
 }
 
-const appendShark = () => {
-  let shark = document.createElement('img')
-  shark.setAttribute('id', 'sharkImg')
-  shark.src = 'https://i.imgur.com/LkHAYBF.jpg'
-  let container = document.querySelector('#hero')
-  container.appendChild(shark)
-}
-
-// let player2 = new Player()
-// player2.addCardToHand(new Card('Five', 'Spades', 3))
-// player2.printHand()
-// console.log(player2.isInHand(3))
-// console.log(player2.isInHand(5))
-
 newGameBtn.addEventListener('click', playGame)
-
-// initDeck(gameDeck)
-// printDeck(gameDeck)
-
-// appendShark()
