@@ -84,6 +84,7 @@ const logToGameLog = (string) => {
   let stringToAdd = document.createElement('p')
   stringToAdd.innerText = string
   gameLog.appendChild(stringToAdd)
+  gameLog.scrollTop = gameLog.scrollHeight
 }
 
 let cardsFishedAndOrWished = 0
@@ -151,8 +152,6 @@ class Player {
     }
   }
   removeCardsFromHand(cardVal, numCards) {
-    // function to remove 4 cards in case of book, or all cards of card value
-    // if fished  by an opponent
     let cardsToRemove = []
     for (let i = 0; i < this.hand.length; i++) {
       if (
@@ -246,7 +245,6 @@ const dealCards = (allPlayers) => {
 
   if (allPlayers.length === 2) {
     for (let i = 0; i < allPlayers.length; i++) {
-      // 2 players so 7 cards dealt to each
       for (let j = 0; j < 7; j++) {
         let cardDrawn = drawTopCard(gameDeck)
         allPlayers[i].addCardToHand(cardDrawn)
@@ -256,7 +254,6 @@ const dealCards = (allPlayers) => {
     }
   } else {
     for (let i = 0; i < allPlayers.length; i++) {
-      // 3-4 players so 5 cards dealt to each
       for (let j = 0; j < 5; j++) {
         let cardDrawn = drawTopCard(gameDeck)
         allPlayers[i].addCardToHand(cardDrawn)
@@ -293,7 +290,6 @@ const getWinner = (players) => {
 }
 
 const letTheHumanFish = (playerToFishFromID, cardValueToFishFor) => {
-  // function will take in the player to fish from and proceed with logic
   let goAgain = false
   let humanPlayer = allPlayers[0]
   let playerIndex = playerToFishFromID[playerToFishFromID.length - 1]
@@ -328,7 +324,6 @@ const letTheHumanFish = (playerToFishFromID, cardValueToFishFor) => {
       generatePlayerHandDisplay(humanPlayer)
       if (fishMyWishCand.value === cardValueToFishFor) {
         logToGameLog('You fished your wish! You get to go again')
-        // TIME TO RESET THE PLAYER CHOICE EVENT LISTENERS
         goAgain = true
       }
     }
@@ -439,8 +434,6 @@ const letTheRobotsPlay = (players) => {
             i--
           }
         } else {
-          // NEXT PLAYERS TURN
-
           player.updateBooks()
           player.sortHandByValue()
         }
@@ -553,7 +546,6 @@ const chooseCard = (e) => {
   let infoString = e.target.innerHTML
   cardTarget = infoString
   removeEarsFromCards()
-  // now we have chosen a player and a card, we need to run game logic
   if (infoString[infoString.length - 2] === ' ') {
     letTheHumanFish(playerTarget, infoString[infoString.length - 1])
   } else {
